@@ -20,6 +20,10 @@ public class Point {
         return y;
     }
 
+    public BigDecimal distanceFrom(Point point) {
+        return BigDecimal.valueOf(Math.sqrt(point.getX().subtract(x).pow(2).add(point.getY().subtract(y).pow(2)).doubleValue()));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
