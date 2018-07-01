@@ -254,4 +254,42 @@ public class LineSegmentTest {
         ray = new Ray(point);
         assertFalse(horizontalLineSegment.intersectedBy(ray));
     }
+
+    @Test
+    public void shouldContainsAPointOfSegment(){
+        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(3)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(4)));
+        Point pointThatBellowsToSegment = new Point(BigDecimal.valueOf(2.5), BigDecimal.valueOf(3.5));
+        assertTrue(lineSegment.contains(pointThatBellowsToSegment));
+
+        Point pointInHorizontalLine = new Point(BigDecimal.valueOf(2.4), BigDecimal.valueOf(4));
+        assertTrue(horizontalLineSegment.contains(pointInHorizontalLine));
+    }
+
+    @Test
+    public void shouldContainsAPointsThatMatchesVertex(){
+        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(3)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(4)));
+        assertTrue(lineSegment.contains(lineSegment.getVertexA()));
+        assertTrue(lineSegment.contains(lineSegment.getVertexB()));
+
+        assertTrue(horizontalLineSegment.contains(horizontalLineSegment.getVertexA()));
+        assertTrue(horizontalLineSegment.contains(horizontalLineSegment.getVertexB()));
+    }
+
+    @Test
+    public void shouldNotContainsAPointOutsideSegment(){
+        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(3)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(4)));
+        Point pointOutsideToSegment1 = new Point(BigDecimal.valueOf(2.5), BigDecimal.valueOf(3));
+        Point pointOutsideToSegment2 = new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(3.5));
+        Point pointOutsideToSegment3 = new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(3));
+        assertFalse(lineSegment.contains(pointOutsideToSegment1));
+        assertFalse(lineSegment.contains(pointOutsideToSegment2));
+        assertFalse(lineSegment.contains(pointOutsideToSegment3));
+
+        Point pointIOutHorizontalLine1 = new Point(BigDecimal.valueOf(1), BigDecimal.valueOf(4));
+        Point pointIOutHorizontalLine2 = new Point(BigDecimal.valueOf(4), BigDecimal.valueOf(4));
+        Point pointIOutHorizontalLine3 = new Point(BigDecimal.valueOf(1), BigDecimal.valueOf(5));
+        assertFalse(horizontalLineSegment.contains(pointIOutHorizontalLine1));
+        assertFalse(horizontalLineSegment.contains(pointIOutHorizontalLine2));
+        assertFalse(horizontalLineSegment.contains(pointIOutHorizontalLine3));
+    }
 }

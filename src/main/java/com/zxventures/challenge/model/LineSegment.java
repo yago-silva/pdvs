@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import static java.math.RoundingMode.CEILING;
+
 public class LineSegment {
 
     private Point vertexA;
@@ -12,6 +14,9 @@ public class LineSegment {
     private BigDecimal minYAxis;
     private BigDecimal maxYAxis;
     private BigDecimal maxXAxis;
+    private BigDecimal minXAxis;
+    private static final Integer SCALE = 20;
+    private static final RoundingMode ROUNDING_MODE = CEILING;
 
     public LineSegment(Point vertexA, Point vertexB) {
         this.vertexA = vertexA;
@@ -29,6 +34,7 @@ public class LineSegment {
         sortedXAxis.add(vertexA.getX());
         sortedXAxis.add(vertexB.getX());
 
+        this.minXAxis = sortedXAxis.first();
         this.maxXAxis = sortedXAxis.last();
     }
 
@@ -42,35 +48,54 @@ public class LineSegment {
 
     public boolean intersectedBy(Ray ray){
         Point rayEndpoint = ray.getEndpoint();
-        boolean onTheRightOfEdge = rayEndpoint.getX().compareTo(determineXBy(rayEndpoint.getY())) == 1;
-        return isInYAxisRange(ray) && !onTheRightOfEdge;
+        boolean onTheRightOfEdge;
+
+        if(isHorizontal()){
+            onTheRightOfEdge = rayEndpoint.getX().compareTo(maxXAxis) == 1;
+        }else {
+            onTheRightOfEdge = rayEndpoint.getX().compareTo(determineXBy(rayEndpoint.getY())) == 1;
+        }
+        return isInYAxisRange(ray.getEndpoint().getY()) && !onTheRightOfEdge;
     }
 
-    private boolean isInYAxisRange(Ray ray){
-        BigDecimal rayEndpointYAxis = ray.getEndpoint().getY();
-        return rayEndpointYAxis.compareTo(minYAxis) >= 0 && rayEndpointYAxis.compareTo(maxYAxis) <= 0;
+    public boolean contains(Point point){
+        if(isHorizontal()){
+            return isInYAxisRange(point.getY()) && isInXAxisRange(point.getX());
+        }
+
+        return isInYAxisRange(point.getY()) &&
+                determineXBy(point.getY()).compareTo(point.getX()) == 0;
+    }
+
+    private boolean isInYAxisRange(BigDecimal y){
+        return y.compareTo(minYAxis) >= 0 && y.compareTo(maxYAxis) <= 0;
+    }
+
+    private boolean isInXAxisRange(BigDecimal x){
+        return x.compareTo(minXAxis) >= 0 && x.compareTo(maxXAxis) <= 0;
     }
 
     private boolean isVertical(){
         return vertexA.getX().equals(vertexB.getX());
     }
 
-    private boolean isHorizontal(){
+    public boolean isHorizontal(){
         return vertexA.getY().equals(vertexB.getY());
     }
 
     private BigDecimal determineXBy(BigDecimal y){
-        if(this.isHorizontal()){
-            return maxXAxis;
-        }
-
         if(this.isVertical()){
             return vertexA.getX();
         }
-        return  BigDecimal.valueOf(-1).multiply(angularCoefficient().multiply(vertexA.getX())).add(vertexA.getY().subtract(y)).divide(angularCoefficient(), 20, RoundingMode.CEILING).multiply(BigDecimal.valueOf(-1));
+        return  BigDecimal.valueOf(-1).multiply(angularCoefficient().multiply(vertexA.getX())).add(vertexA.getY().subtract(y)).divide(angularCoefficient(), SCALE, ROUNDING_MODE).multiply(BigDecimal.valueOf(-1));
     }
 
     private BigDecimal angularCoefficient(){
-        return vertexB.getY().subtract(vertexA.getY()).divide(vertexB.getX().subtract(vertexA.getX()), 20, RoundingMode.CEILING);
+        return vertexB.getY().subtract(vertexA.getY()).divide(vertexB.getX().subtract(vertexA.getX()), SCALE, ROUNDING_MODE);
+    }
+
+    public static void main(String[] args) {
+        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(3)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(4)));
+        System.out.println(lineSegment.determineXBy(BigDecimal.valueOf(3.5)));
     }
 }
