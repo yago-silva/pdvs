@@ -1,11 +1,16 @@
 package com.zxventures.challenge.model;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class MultiPolygon {
 
     private List<PolygonEdge> edges;
     private List<Point> vertices;
+    private BigDecimal maxY;
+    private BigDecimal minY;
+    private BigDecimal maxX;
+    private BigDecimal minX;
 
     public MultiPolygon(List<Polygon> polygons){
 
@@ -20,11 +25,30 @@ public class MultiPolygon {
             this.vertices.addAll(polygon.getVertices());
             this.edges.addAll(polygon.getEdges());
         }
+
+        SortedSet<BigDecimal> sortedXAxis = new TreeSet();
+        SortedSet<BigDecimal> sortedYAxis = new TreeSet();
+        for(Point vertex : vertices) {
+            sortedXAxis.add(vertex.getX());
+            sortedYAxis.add(vertex.getY());
+        }
+
+        this.minX = sortedXAxis.first();
+        this.maxX = sortedXAxis.last();
+
+        this.minY = sortedYAxis.first();
+        this.maxY = sortedYAxis.last();
     }
 
-
-    //TODO: Compare point with max coordinates rectangle before continue (to gain performance if point is outside rectangle)
     public boolean contains(Point point){
+        /*
+         * This is a technique to increase performance. We just excludes points that is not in max coordinates
+         * rectangle, and so is for sure not inside polygon
+         **/
+        if(!isInsideMaxCoordinatesRectangle(point)){
+            return false;
+        }
+
         if(vertices.contains(point)){
             return true;
         }
@@ -35,10 +59,14 @@ public class MultiPolygon {
             }
         }
 
-        //TODO: Create a class that encapsulates even/odd rule
         //Use even/odd rule to determine of point is or not inside polygon
         int intersectionsCount = countIntersections(point);
         return intersectionsCount != 0 && !(intersectionsCount % 2 == 0);
+    }
+
+    private boolean isInsideMaxCoordinatesRectangle(Point point){
+        return maxX.compareTo(point.getX()) >= 0 && minX.compareTo(point.getX()) <= 0
+                && maxY.compareTo(point.getY()) >= 0 && minY.compareTo(point.getY()) <= 0;
     }
 
     private int countIntersections(Point point){

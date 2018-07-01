@@ -93,9 +93,4 @@ public class LineSegment {
     private BigDecimal angularCoefficient(){
         return vertexB.getY().subtract(vertexA.getY()).divide(vertexB.getX().subtract(vertexA.getX()), SCALE, ROUNDING_MODE);
     }
-
-    public static void main(String[] args) {
-        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(3)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(4)));
-        System.out.println(lineSegment.determineXBy(BigDecimal.valueOf(3.5)));
-    }
 }

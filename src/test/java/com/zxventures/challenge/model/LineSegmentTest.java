@@ -292,4 +292,16 @@ public class LineSegmentTest {
         assertFalse(horizontalLineSegment.contains(pointIOutHorizontalLine2));
         assertFalse(horizontalLineSegment.contains(pointIOutHorizontalLine3));
     }
+
+    @Test
+    public void shouldReturnTrueWhenLineSegmentVerticesMarchesYAxis(){
+        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(4)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(4)));
+        assertTrue(lineSegment.isHorizontal());
+    }
+
+    @Test
+    public void shouldReturnFalseWhenLineSegmentVerticesDoesNotMarchesYAxis(){
+        LineSegment lineSegment = new LineSegment(new Point(BigDecimal.valueOf(3), BigDecimal.valueOf(4)), new Point(BigDecimal.valueOf(2), BigDecimal.valueOf(5)));
+        assertFalse(lineSegment.isHorizontal());
+    }
 }
