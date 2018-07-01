@@ -5,6 +5,12 @@ public class PolygonEdge extends LineSegment {
     private PolygonEdge previous;
     private PolygonEdge next;
 
+    /*
+    * Here just because of java bean compatibility reasons
+    * */
+    @Deprecated
+    PolygonEdge(){}
+
     public PolygonEdge(Point vertexA, Point vertexB) {
         super(vertexA, vertexB);
     }

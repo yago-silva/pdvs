@@ -1,6 +1,5 @@
 package com.zxventures.challenge.model;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,21 +18,34 @@ public class PdvTest {
     @Before
     public void setup(){
         multiPolygon = mock(MultiPolygon.class);
-        pdv = new Pdv(new Point(BigDecimal.ONE, BigDecimal.ONE), multiPolygon);
+        pdv = new Pdv(new Point(BigDecimal.ONE, BigDecimal.ONE), multiPolygon, null, null, null);
     }
 
     @Test
     public void shouldReturnTrueWhenPvdMeetsRegion(){
         Point point = new Point(BigDecimal.valueOf(5), BigDecimal.valueOf(4));
         when(multiPolygon.contains(point)).thenReturn(true);
-        DeliveryProposal deliveryProposal = pdv.serveRegion(point).get();
-        assertThat(deliveryProposal.getDistance(), equalTo(BigDecimal.valueOf(5.0)));
+        assertTrue(pdv.serveRegion(point));
     }
 
     @Test
     public void shouldReturnFalseWhenPvdNotMeetsRegion(){
         Point point = new Point(BigDecimal.valueOf(5), BigDecimal.valueOf(4));
         when(multiPolygon.contains(point)).thenReturn(false);
-        assertFalse(pdv.serveRegion(point).isPresent());
+        assertFalse(pdv.serveRegion(point));
+    }
+
+    @Test
+    public void shouldCalculateDistanceFromPoint(){
+        BigDecimal expectedDistance = BigDecimal.TEN;
+
+        Point point = new Point(BigDecimal.valueOf(5), BigDecimal.valueOf(4));
+
+        Point geolocation = mock(Point.class);
+        when(geolocation.distanceFrom(point)).thenReturn(expectedDistance);
+
+        pdv = new Pdv(geolocation, multiPolygon, null, null, null);
+
+        assertThat(pdv.distanceFrom(point), equalTo(expectedDistance));
     }
 }

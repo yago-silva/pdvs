@@ -1,5 +1,7 @@
 package com.zxventures.challenge.model;
 
+import com.zxventures.challenge.model.exception.InvalidPolygonException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,9 +11,15 @@ public class Polygon {
     private List<Point> vertices;
     private List<PolygonEdge> edges;
 
+    /*
+    * Here just because of java bean compatibility reasons
+    * */
+    @Deprecated
+    Polygon(){}
+
     public Polygon(List<Point> vertices) {
         if(vertices.size() < 3){
-            throw new IllegalArgumentException("MultiPolygon must have at least 3 vertices");
+            throw new InvalidPolygonException();
         }
         this.vertices = vertices;
 

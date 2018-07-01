@@ -5,6 +5,7 @@ import java.util.*;
 
 public class MultiPolygon {
 
+    private List<Polygon> polygons;
     private List<PolygonEdge> edges;
     private List<Point> vertices;
     private BigDecimal maxY;
@@ -12,12 +13,14 @@ public class MultiPolygon {
     private BigDecimal maxX;
     private BigDecimal minX;
 
+    /*
+    * Here just because of java bean compatibility reasons
+    * */
+    @Deprecated
+    MultiPolygon(){}
+
     public MultiPolygon(List<Polygon> polygons){
-
-        if(polygons.size() < 1){
-            throw new IllegalArgumentException("MultiPolygon must have at least 1 polygon");
-        }
-
+        this.polygons = new ArrayList<>(polygons);
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
 
@@ -119,7 +122,11 @@ public class MultiPolygon {
                 && (nextAndPreviousMaxYAxisAreBiggerThatEdgeYAxis || nextAndPreviousMaxYAxisAreSmallerThatEdgeYAxis);
     }
 
-    List<Point> getVertices() {
+    public List<Point> getVertices() {
         return vertices;
+    }
+
+    public List<Polygon> getPolygons() {
+        return polygons;
     }
 }

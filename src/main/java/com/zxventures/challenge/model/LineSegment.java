@@ -1,5 +1,6 @@
 package com.zxventures.challenge.model;
 
+import javax.sound.sampled.Line;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.SortedSet;
@@ -17,6 +18,12 @@ public class LineSegment {
     private BigDecimal minXAxis;
     private static final Integer SCALE = 20;
     private static final RoundingMode ROUNDING_MODE = CEILING;
+
+    /*
+    * Here just because of java bean compatibility reasons
+    * */
+    @Deprecated
+    LineSegment(){}
 
     public LineSegment(Point vertexA, Point vertexB) {
         this.vertexA = vertexA;

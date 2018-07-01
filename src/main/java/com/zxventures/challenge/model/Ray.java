@@ -4,6 +4,12 @@ public class Ray {
 
     private Point endpoint;
 
+    /*
+    * Here just because of java bean compatibility reasons
+    * */
+    @Deprecated
+    Ray(){}
+
     public Ray(Point endpoint){
         this.endpoint = endpoint;
     }

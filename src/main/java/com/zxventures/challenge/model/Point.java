@@ -7,6 +7,12 @@ public class Point {
     private BigDecimal x;
     private BigDecimal y;
 
+    /*
+    * Here just because of java bean compatibility reasons
+    * */
+    @Deprecated
+    Point(){}
+
     public Point(BigDecimal x, BigDecimal y) {
         this.x = x;
         this.y = y;

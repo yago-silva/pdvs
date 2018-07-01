@@ -46,11 +46,6 @@ public class MultiPolygonTest {
         this.multiPolygon = new MultiPolygon(asList(principalPolygon, excludeAreaPolygon));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void multiPolygonMustHaveAtLeastOnePolygon(){
-        new MultiPolygon(asList());
-    }
-
     /**
      *   o----------------o   o   X----------->
      *   |                |  /|  /|
