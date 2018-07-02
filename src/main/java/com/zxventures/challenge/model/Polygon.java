@@ -9,7 +9,6 @@ import java.util.List;
 public class Polygon {
 
     private List<Point> vertices;
-    private List<PolygonEdge> edges;
 
     /*
     * Here just because of java bean compatibility reasons
@@ -21,9 +20,15 @@ public class Polygon {
         if(vertices.size() < 3){
             throw new InvalidPolygonException();
         }
-        this.vertices = vertices;
+        this.vertices = new ArrayList<>(vertices);
+    }
 
-        this.edges = new ArrayList<>();
+    public List<Point> getVertices() {
+        return vertices;
+    }
+
+    public List<PolygonEdge> getEdges() {
+        List<PolygonEdge> edges = new ArrayList<>();
 
         Iterator<Point> iterator = this.vertices.iterator();
 
@@ -38,29 +43,22 @@ public class Polygon {
             if(previousEdge != null){
                 previousEdge.setNext(polygonEdge);
             }
-            this.edges.add(polygonEdge);
+            edges.add(polygonEdge);
             vertexA = vertexB;
 
             previousEdge = polygonEdge;
         }
 
-        PolygonEdge firstPolygonEdge = this.edges.get(0);
-        PolygonEdge actualLastPolygonEdge = this.edges.get(this.edges.size() -1);
-
+        PolygonEdge firstPolygonEdge = edges.get(0);
+        PolygonEdge actualLastPolygonEdge = edges.get(edges.size() -1);
 
         Point firstPolygonPoint = this.vertices.get(0);
         Point lastPolygonPoint = this.vertices.get(this.vertices.size() - 1);
         PolygonEdge lastLineSegment = new PolygonEdge(lastPolygonPoint, firstPolygonPoint);
         lastLineSegment.setNext(firstPolygonEdge);
         actualLastPolygonEdge.setNext(lastLineSegment);
-        this.edges.add(lastLineSegment);
-    }
+        edges.add(lastLineSegment);
 
-    public List<Point> getVertices() {
-        return vertices;
-    }
-
-    public List<PolygonEdge> getEdges() {
         return edges;
     }
 }

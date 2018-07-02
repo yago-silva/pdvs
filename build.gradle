@@ -29,14 +29,22 @@ dependencyManagement {
 }
 
 dependencies {
+
+    //Rest
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'io.springfox:springfox-swagger2:2.7.0'
     compile 'io.springfox:springfox-swagger-ui:2.7.0'
 
+    //Database
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+
+
+    //Test
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.19.0'
     testCompile 'br.com.six2six:fixture-factory:3.1.0'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'com.jayway.restassured:rest-assured:2.9.0'
+    testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 }

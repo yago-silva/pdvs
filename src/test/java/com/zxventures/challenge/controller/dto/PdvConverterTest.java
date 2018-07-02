@@ -50,7 +50,7 @@ public class PdvConverterTest {
 
         PdvGeolocationDto pdvGeolocationDto = new PdvGeolocationDto("Point", asList(BigDecimal.ONE, BigDecimal.TEN));
 
-        PdvDto dto = new PdvDto(1L, UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+        PdvDto dto = new PdvDto(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(),
                 multipolygonDto, pdvGeolocationDto);
 
         Pdv pdv = pdvConverter.fromDtoToModel(dto);

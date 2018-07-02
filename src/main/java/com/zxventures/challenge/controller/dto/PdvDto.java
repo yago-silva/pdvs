@@ -11,7 +11,7 @@ import javax.validation.constraints.Null;
 public class PdvDto {
 
     @Null
-    private Long id;
+    private String id;
 
     @NotBlank
     private String tradingName;
@@ -37,7 +37,7 @@ public class PdvDto {
     @Deprecated
     PdvDto(){}
 
-    public PdvDto(Long id, String tradingName, String ownerName, String document, MultipolygonDto coverageArea, PdvGeolocationDto address) {
+    public PdvDto(String id, String tradingName, String ownerName, String document, MultipolygonDto coverageArea, PdvGeolocationDto address) {
         this.id = id;
         this.tradingName = tradingName;
         this.ownerName = ownerName;
@@ -46,7 +46,7 @@ public class PdvDto {
         this.address = address;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

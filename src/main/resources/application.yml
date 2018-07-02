@@ -1,0 +1,10 @@
+# MongoDB config
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: root
+      password: root
+      database: challenge
+      port: 27017
+      host: localhost

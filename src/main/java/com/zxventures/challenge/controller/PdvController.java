@@ -33,7 +33,7 @@ public class PdvController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PdvDto> getPdv(@PathVariable("id") Long id){
+    public ResponseEntity<PdvDto> getPdv(@PathVariable("id") String id){
         return pdvService.findById(id)
                 .map(pdv -> ResponseEntity.ok(pdvConverter.fromModelToDto(pdv)))
                 .orElse(ResponseEntity.notFound().build());

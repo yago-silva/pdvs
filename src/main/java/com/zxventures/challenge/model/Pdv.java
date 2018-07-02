@@ -1,10 +1,15 @@
 package com.zxventures.challenge.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.math.BigDecimal;
 
+@Document
 public class Pdv {
 
-    private Long id;
+    @Id
+    private String id;
 
     private Point geolocation;
 
@@ -38,7 +43,7 @@ public class Pdv {
         return geolocation.distanceFrom(point);
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

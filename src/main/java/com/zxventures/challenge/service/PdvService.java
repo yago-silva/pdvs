@@ -22,8 +22,8 @@ public class PdvService {
         return pdvRepository.save(pdv);
     }
 
-    public Optional<Pdv> findById(Long id){
-        return pdvRepository.findById(id);
+    public Optional<Pdv> findById(String id){
+        return Optional.ofNullable(pdvRepository.findOne(id));
     }
 
     public Optional<Pdv> findCloserFrom(Point point){

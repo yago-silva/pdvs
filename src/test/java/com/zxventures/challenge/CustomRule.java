@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+
 import br.com.six2six.fixturefactory.function.Function;
 import br.com.six2six.fixturefactory.function.impl.RandomFunction;
 
@@ -42,6 +44,14 @@ public class CustomRule extends Rule {
         };
     }
 
+    public Function uuid(){
+        return new AtomicFunction() {
+            @Override
+            public String generateValue() {
+                return UUID.randomUUID().toString();
+            }
+        };
+    }
 
     public Function cnpj(){
         return new AtomicFunction() {
