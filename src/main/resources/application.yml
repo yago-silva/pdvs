@@ -2,9 +2,9 @@
 spring:
   data:
     mongodb:
-      authentication-database: admin
-      username: root
-      password: root
-      database: challenge
-      port: 27017
-      host: localhost
+      authentication-database: ${MONGODB_AUTH_DATABASE}
+      username: ${MONGODB_USER_NAME}
+      password: ${MONGODB_USER_PASSWORD}
+      database: ${MONGODB_COLLECTION_NAME}
+      port: ${MONGODB_PORT}
+      host: ${MONGODB_HOST}
