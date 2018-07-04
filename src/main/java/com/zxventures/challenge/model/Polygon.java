@@ -1,6 +1,6 @@
 package com.zxventures.challenge.model;
 
-import com.zxventures.challenge.model.exception.InvalidPolygonException;
+import com.zxventures.challenge.exception.InvalidPolygonException;
 
 import java.util.ArrayList;
 import java.util.Iterator;

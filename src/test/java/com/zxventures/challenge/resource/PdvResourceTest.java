@@ -12,7 +12,7 @@ import com.zxventures.challenge.model.MultiPolygon;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
 import com.zxventures.challenge.model.Polygon;
-import com.zxventures.challenge.model.repository.PdvRepository;
+import com.zxventures.challenge.repository.PdvRepository;
 import com.zxventures.challenge.model.template.PdvTemplateLoader;
 import com.zxventures.challenge.service.PdvService;
 import org.junit.*;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;

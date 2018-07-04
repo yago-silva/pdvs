@@ -1,4 +1,4 @@
-package com.zxventures.challenge.model.repository;
+package com.zxventures.challenge.repository;
 
 import com.zxventures.challenge.model.Pdv;
 import org.springframework.data.mongodb.repository.MongoRepository;

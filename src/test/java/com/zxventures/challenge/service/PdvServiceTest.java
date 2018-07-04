@@ -7,7 +7,7 @@ import com.zxventures.challenge.model.MultiPolygon;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
 import com.zxventures.challenge.model.Polygon;
-import com.zxventures.challenge.model.repository.PdvRepository;
+import com.zxventures.challenge.repository.PdvRepository;
 import com.zxventures.challenge.model.template.PdvTemplateLoader;
 import org.junit.Before;
 import org.junit.BeforeClass;

@@ -3,17 +3,14 @@ package com.zxventures.challenge.graphql;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
-import com.zxventures.challenge.dto.create.CreatePdvDto;
 import com.zxventures.challenge.dto.read.GetPdvDto;
-import com.zxventures.challenge.dto.templates.PdvDtoTemplateLoader;
 import com.zxventures.challenge.model.MultiPolygon;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
 import com.zxventures.challenge.model.Polygon;
-import com.zxventures.challenge.model.repository.PdvRepository;
+import com.zxventures.challenge.repository.PdvRepository;
 import com.zxventures.challenge.model.template.PdvTemplateLoader;
 import com.zxventures.challenge.service.PdvService;
 import org.junit.After;
@@ -28,23 +25,16 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.http.ContentType.JSON;
 import static com.zxventures.challenge.resource.PdvAssertion.assertPdvsAreEquals;
-import static com.zxventures.challenge.resource.PdvResource.PDVS_PATH;
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(SpringRunner.class)

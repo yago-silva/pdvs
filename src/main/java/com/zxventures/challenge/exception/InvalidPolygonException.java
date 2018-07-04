@@ -1,4 +1,4 @@
-package com.zxventures.challenge.model.exception;
+package com.zxventures.challenge.exception;
 
 import graphql.ErrorType;
 import graphql.GraphQLError;

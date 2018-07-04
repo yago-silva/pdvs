@@ -2,7 +2,7 @@ package com.zxventures.challenge.service;
 
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
-import com.zxventures.challenge.model.repository.PdvRepository;
+import com.zxventures.challenge.repository.PdvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
