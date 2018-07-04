@@ -6,6 +6,7 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
+import com.zxventures.challenge.CustomRule;
 import com.zxventures.challenge.dto.create.CreateMultipolygonDto;
 import com.zxventures.challenge.dto.create.CreatePdvDto;
 import com.zxventures.challenge.dto.templates.PdvDtoTemplateLoader;
@@ -82,6 +83,28 @@ public class MutationTest {
         Pdv createdPdv = allPdvs.get(0);
 
         assertPdvsAreEquals(createdPdv, dto);
+    }
+
+    @Test
+    public void shouldNotAllowDuplicatedCnpj() throws JsonProcessingException {
+        CreatePdvDto firstPdv = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID);
+
+        String createPdvDtoJson = objectMapper.writeValueAsString(firstPdv);
+
+        String graphqlMutation = String.format("{\"query\": \"mutation($pdv: PdvInputDto!) { save(input: $pdv) {id} }\", \"variables\": {\"pdv\": %s }}", createPdvDtoJson);
+        given().log().all().contentType(JSON).body(graphqlMutation).expect().statusCode(OK.value()).when().post("/graphql");
+
+
+        CreatePdvDto pdvWithTheSameCnpj = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new CustomRule(){{
+            add("document", firstPdv.getDocument());
+        }});
+        assertNotCreateInvalidPdv(pdvWithTheSameCnpj, String.format("Document %s already used", firstPdv.getDocument()));
+
+        List<Pdv> allPdvs = pdvRepository.findAll();
+        assertThat(allPdvs.size(), equalTo(1));
+        Pdv createdPdv = allPdvs.get(0);
+
+        assertPdvsAreEquals(createdPdv, firstPdv);
     }
 
 

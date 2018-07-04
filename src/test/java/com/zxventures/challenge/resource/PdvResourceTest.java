@@ -4,6 +4,7 @@ import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import com.jayway.restassured.RestAssured;
+import com.zxventures.challenge.CustomRule;
 import com.zxventures.challenge.dto.create.CreateMultipolygonDto;
 import com.zxventures.challenge.dto.create.CreatePdvDto;
 import com.zxventures.challenge.dto.read.GetPdvDto;
@@ -76,6 +77,24 @@ public class PdvResourceTest {
         Pdv createdPdv = allPdvs.get(0);
 
         assertPdvsAreEquals(createdPdv, dto);
+    }
+
+    @Test
+    public void shouldNotAllowDuplicatedCnpj(){
+        CreatePdvDto firstPdv = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID);
+        given().log().all().contentType(JSON).body(firstPdv).expect().statusCode(CREATED.value()).when().post(PDVS_PATH);
+
+
+        CreatePdvDto pdvWithTheSameCnpj = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new CustomRule(){{
+            add("document", firstPdv.getDocument());
+        }});
+        given().log().all().contentType(JSON).body(firstPdv).expect().statusCode(CREATED.value()).when().post(PDVS_PATH);
+
+        List<Pdv> allPdvs = pdvRepository.findAll();
+        assertThat(allPdvs.size(), equalTo(1));
+        Pdv createdPdv = allPdvs.get(0);
+
+        assertPdvsAreEquals(createdPdv, firstPdv);
     }
 
     @Test

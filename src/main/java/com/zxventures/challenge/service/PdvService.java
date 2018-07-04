@@ -1,5 +1,6 @@
 package com.zxventures.challenge.service;
 
+import com.zxventures.challenge.exception.DocumentAlreadyUsedException;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
 import com.zxventures.challenge.repository.PdvRepository;
@@ -19,6 +20,9 @@ public class PdvService {
     }
 
     public Pdv save(Pdv pdv){
+        pdvRepository.findByDocument(pdv.getDocument()).ifPresent( foundPdv -> {
+            throw new DocumentAlreadyUsedException(String.format("Document %s already used", foundPdv.getDocument()));
+        });
         return pdvRepository.save(pdv);
     }
 
