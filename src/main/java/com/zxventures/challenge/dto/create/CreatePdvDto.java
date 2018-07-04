@@ -15,7 +15,6 @@ public class CreatePdvDto {
     private String ownerName;
 
     @NotBlank
-    @CNPJ
     private String document;
 
     @NotNull

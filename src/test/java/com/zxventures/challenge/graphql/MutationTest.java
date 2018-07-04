@@ -121,15 +121,6 @@ public class MutationTest {
     @Test
     public void shouldReturnBadRequestIfDocumentIsInvalid() throws JsonProcessingException {
         assertBadRequestForInvalidStringProperty("document");
-
-        CreatePdvDto createPdvDtoInvalidDocument = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
-            add("document","02622111000110");
-        }});
-
-        String graphqlMutation = String.format("{\"query\": \"mutation($pdv: PdvInputDto!) { save(input: $pdv) {id} }\", \"variables\": {\"pdv\": %s }}", objectMapper.writeValueAsString(createPdvDtoInvalidDocument));
-        String errorMessage = given().log().all().contentType(JSON).body(graphqlMutation).expect().statusCode(OK.value()).when().post("/graphql")
-                .jsonPath().getString(("errors[0].message"));
-        assertTrue(errorMessage.contains("document CNPJ inválido"));
     }
 
 

@@ -9,11 +9,8 @@ import java.util.List;
 
 public class GetMultipolygonDto {
 
-    @NotBlank
-    @Pattern(regexp = "MultiPolygon")
     private String type;
 
-    @NotNull
     private List<List<List<List<BigDecimal>>>> coordinates;
 
     /**

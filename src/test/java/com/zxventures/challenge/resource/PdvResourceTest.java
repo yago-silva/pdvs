@@ -88,7 +88,7 @@ public class PdvResourceTest {
         CreatePdvDto pdvWithTheSameCnpj = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new CustomRule(){{
             add("document", firstPdv.getDocument());
         }});
-        given().log().all().contentType(JSON).body(firstPdv).expect().statusCode(CREATED.value()).when().post(PDVS_PATH);
+        given().log().all().contentType(JSON).body(pdvWithTheSameCnpj).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
         List<Pdv> allPdvs = pdvRepository.findAll();
         assertThat(allPdvs.size(), equalTo(1));
@@ -111,15 +111,6 @@ public class PdvResourceTest {
     public void shouldReturnBadRequestIfDocumentIsInvalid(){
 
         assertBadRequestForInvalidStringProperty("document");
-
-        CreatePdvDto createPdvDtoInvalidDocument = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
-            add("document","02622111000110");
-        }});
-
-        given().contentType(JSON).body(createPdvDtoInvalidDocument).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
-
-        List<Pdv> allPdvs = pdvRepository.findAll();
-        assertThat(allPdvs.size(), equalTo(0));
     }
 
     @Test

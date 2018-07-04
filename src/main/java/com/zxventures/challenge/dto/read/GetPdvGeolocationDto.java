@@ -8,12 +8,8 @@ import java.util.List;
 
 public class GetPdvGeolocationDto {
 
-    @NotNull
-    @Pattern(regexp = "Point")
     private String type;
 
-    @NotNull
-    @Size(min = 2, max = 2)
     private List<BigDecimal> coordinates;
 
     /**
