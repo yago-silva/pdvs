@@ -1,12 +1,11 @@
-package com.zxventures.challenge.controller.dto.templates;
+package com.zxventures.challenge.dto.templates;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.TemplateLoader;
 import com.zxventures.challenge.CustomRule;
-import com.zxventures.challenge.controller.dto.PdvGeolocationDto;
+import com.zxventures.challenge.dto.create.CreatePdvGeolocationDto;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 import static java.util.Arrays.asList;
 
@@ -23,32 +22,32 @@ public class PdvGeolocationDtoTemplateLoader implements TemplateLoader {
 
     @Override
     public void load() {
-        Fixture.of(PdvGeolocationDto.class).addTemplate(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(VALID, new CustomRule() {{
             add("type", "Point");
             add("coordinates", randomDtoGeolocationCoordinates());
         }});
 
-        Fixture.of(PdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_HAS_A_INVALID_TYPE).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_HAS_A_INVALID_TYPE).inherits(VALID, new CustomRule() {{
             add("type", "Multipolygon");
         }});
 
-        Fixture.of(PdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_NULL).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_NULL).inherits(VALID, new CustomRule() {{
             add("type", null);
         }});
 
-        Fixture.of(PdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_BLANK).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_BLANK).inherits(VALID, new CustomRule() {{
             add("type", "    ");
         }});
 
-        Fixture.of(PdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_EMPTY).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_EMPTY).inherits(VALID, new CustomRule() {{
             add("type", "");
         }});
 
-        Fixture.of(PdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TOO_MANY_BIG_DECIMALS_IN_COORDINATES).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_TOO_MANY_BIG_DECIMALS_IN_COORDINATES).inherits(VALID, new CustomRule() {{
             add("coordinates", asList(BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.TEN));
         }});
 
-        Fixture.of(PdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_COORDINATES_HAS_ONLY_ONE_BIG_DECIMAL).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreatePdvGeolocationDto.class).addTemplate(INVALID_BECAUSE_COORDINATES_HAS_ONLY_ONE_BIG_DECIMAL).inherits(VALID, new CustomRule() {{
             add("coordinates", asList(BigDecimal.TEN));
         }});
     }

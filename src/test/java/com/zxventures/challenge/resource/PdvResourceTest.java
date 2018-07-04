@@ -1,12 +1,13 @@
-package com.zxventures.challenge.controller;
+package com.zxventures.challenge.resource;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 import com.jayway.restassured.RestAssured;
-import com.zxventures.challenge.controller.dto.MultipolygonDto;
-import com.zxventures.challenge.controller.dto.PdvDto;
-import com.zxventures.challenge.controller.dto.templates.PdvDtoTemplateLoader;
+import com.zxventures.challenge.dto.create.CreateMultipolygonDto;
+import com.zxventures.challenge.dto.create.CreatePdvDto;
+import com.zxventures.challenge.dto.read.GetPdvDto;
+import com.zxventures.challenge.dto.templates.PdvDtoTemplateLoader;
 import com.zxventures.challenge.model.MultiPolygon;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
@@ -29,8 +30,8 @@ import java.util.Optional;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
-import static com.zxventures.challenge.controller.PdvAssertion.assertPdvsAreEquals;
-import static com.zxventures.challenge.controller.PdvController.PDVS_PATH;
+import static com.zxventures.challenge.resource.PdvAssertion.assertPdvsAreEquals;
+import static com.zxventures.challenge.resource.PdvResource.PDVS_PATH;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -38,10 +39,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.*;
 
-@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PdvControllerTest {
+public class PdvResourceTest {
 
     @LocalServerPort
     private int serverPort;
@@ -69,7 +69,7 @@ public class PdvControllerTest {
 
     @Test
     public void shouldCreatePdvWithSuccess(){
-        PdvDto dto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID);
+        CreatePdvDto dto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID);
         given().log().all().contentType(JSON).body(dto).expect().statusCode(CREATED.value()).when().post(PDVS_PATH);
 
         List<Pdv> allPdvs = pdvRepository.findAll();
@@ -94,11 +94,11 @@ public class PdvControllerTest {
 
         assertBadRequestForInvalidStringProperty("document");
 
-        PdvDto pdvDtoInvalidDocument = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreatePdvDto createPdvDtoInvalidDocument = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add("document","02622111000110");
         }});
 
-        given().contentType(JSON).body(pdvDtoInvalidDocument).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(createPdvDtoInvalidDocument).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
         List<Pdv> allPdvs = pdvRepository.findAll();
         assertThat(allPdvs.size(), equalTo(0));
@@ -106,28 +106,28 @@ public class PdvControllerTest {
 
     @Test
     public void shouldReturnBadRequestIfPdvDtoAddressIsInvalid(){
-        PdvDto invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreatePdvDto invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add("address",null);
         }});
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_NULL);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_NULL);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_EMPTY);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_EMPTY);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_BLANK);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_BLANK);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_INVALID);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_TYPE_IS_INVALID);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_HAS_TOO_MANY_COORDINATIONS);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_HAS_TOO_MANY_COORDINATIONS);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_HAS_ONLY_ONE_COORDINATE);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_ADDRESS_HAS_ONLY_ONE_COORDINATE);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
         List<Pdv> allPdvs = pdvRepository.findAll();
         assertThat(allPdvs.size(), equalTo(0));
@@ -135,29 +135,29 @@ public class PdvControllerTest {
 
     @Test
     public void shouldReturnBadRequestIfPdvDtoCoverageAreaIsInvalid(){
-        PdvDto invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreatePdvDto invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add("coverageArea",null);
         }});
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_NULL);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_NULL);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_BLANK);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_BLANK);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_EMPTY);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_EMPTY);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_INVALID);
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.INVALID_BECAUSE_COVERAGE_AREA_TYPE_IS_INVALID);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
         //Polygon must have at least 3 vertices
-        MultipolygonDto multiPolygon = new MultipolygonDto("MultiPolygon", asList(asList(asList(asList(BigDecimal.ONE, BigDecimal.ONE)))));
-        invalidPdvDto = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreateMultipolygonDto multiPolygon = new CreateMultipolygonDto("MultiPolygon", asList(asList(asList(asList(BigDecimal.ONE, BigDecimal.ONE)))));
+        invalidCreatePdvDto = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add("coverageArea", multiPolygon);
         }});
-        given().contentType(JSON).body(invalidPdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(invalidCreatePdvDto).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
     }
 
     @Test
@@ -175,8 +175,8 @@ public class PdvControllerTest {
 
         Pdv savedPdv = pdvRepository.save(pdv);
 
-        PdvDto response =
-                given().expect().statusCode(OK.value()).when().get(PDVS_PATH+"/"+ savedPdv.getId()).as(PdvDto.class);
+        GetPdvDto response =
+                given().expect().statusCode(OK.value()).when().get(PDVS_PATH+"/"+ savedPdv.getId()).as(GetPdvDto.class);
 
         assertPdvsAreEquals(savedPdv, response);
     }
@@ -202,47 +202,34 @@ public class PdvControllerTest {
 
         when(pdvService.findCloserFrom(any())).thenReturn(Optional.of(pdv));
 
-        PdvDto responseDto = given().expect().statusCode(OK.value()).when()
-                .get(PDVS_PATH + "/closer?lng=50&lat=40").as(PdvDto.class);
+        GetPdvDto responseDto = given().expect().statusCode(OK.value()).when()
+                .get(PDVS_PATH + "/closer?lng=50&lat=40").as(GetPdvDto.class);
 
         assertPdvsAreEquals(pdv, responseDto);
     }
 
     @Test
     public void shouldReturnNotFoundIfThereIsPdfThatServesPointArea(){
-
-        Polygon firstPdvPolygon = new Polygon(asList(
-                new Point(BigDecimal.valueOf(0),BigDecimal.valueOf(0)),
-                new Point(BigDecimal.valueOf(0),BigDecimal.valueOf(100)),
-                new Point(BigDecimal.valueOf(100),BigDecimal.valueOf(100)),
-                new Point(BigDecimal.valueOf(100),BigDecimal.valueOf(0))
-        ));
-
-        Pdv pdv = Fixture.from(Pdv.class).gimme(PdvTemplateLoader.VALID, new Rule(){{
-            add("coverageArea", new MultiPolygon(asList(firstPdvPolygon)));
-        }});
-
         when(pdvService.findCloserFrom(any())).thenReturn(Optional.empty());
-
         given().expect().statusCode(NOT_FOUND.value()).when().get(PDVS_PATH + "/closer?lng=50&lat=40");
     }
 
     private void assertBadRequestForInvalidStringProperty(String propertyName){
-        PdvDto pdvDtoWithNullProperty = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreatePdvDto createPdvDtoWithNullProperty = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add(propertyName,null);
         }});
 
-        PdvDto pdvDtoWithBlankProperty = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreatePdvDto createPdvDtoWithBlankProperty = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add(propertyName,"     ");
         }});
 
-        PdvDto pdvDtoWithEmptyProperty = Fixture.from(PdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
+        CreatePdvDto createPdvDtoWithEmptyProperty = Fixture.from(CreatePdvDto.class).gimme(PdvDtoTemplateLoader.VALID, new Rule(){{
             add(propertyName,"");
         }});
 
-        given().contentType(JSON).body(pdvDtoWithNullProperty).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
-        given().contentType(JSON).body(pdvDtoWithBlankProperty).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
-        given().contentType(JSON).body(pdvDtoWithEmptyProperty).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(createPdvDtoWithNullProperty).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(createPdvDtoWithBlankProperty).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
+        given().contentType(JSON).body(createPdvDtoWithEmptyProperty).expect().statusCode(BAD_REQUEST.value()).when().post(PDVS_PATH);
 
         List<Pdv> allPdvs = pdvRepository.findAll();
         assertThat(allPdvs.size(), equalTo(0));

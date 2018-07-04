@@ -38,8 +38,8 @@ public class Point {
 
         Point point = (Point) o;
 
-        if (!x.equals(point.x)) return false;
-        return y.equals(point.y);
+        if ( x.compareTo(point.x) != 0) return false;
+        return y.compareTo(point.y) == 0;
     }
 
     @Override

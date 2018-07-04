@@ -1,17 +1,12 @@
-package com.zxventures.challenge.controller.dto;
-
+package com.zxventures.challenge.dto.create;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
-public class PdvDto {
-
-    @Null
-    private String id;
+public class CreatePdvDto {
 
     @NotBlank
     private String tradingName;
@@ -25,29 +20,24 @@ public class PdvDto {
 
     @NotNull
     @Valid
-    private MultipolygonDto coverageArea;
+    private CreateMultipolygonDto coverageArea;
 
     @NotNull
     @Valid
-    private PdvGeolocationDto address;
+    private CreatePdvGeolocationDto address;
 
     /**
      * Here just because of jackson
      * */
     @Deprecated
-    PdvDto(){}
+    CreatePdvDto(){}
 
-    public PdvDto(String id, String tradingName, String ownerName, String document, MultipolygonDto coverageArea, PdvGeolocationDto address) {
-        this.id = id;
+    public CreatePdvDto(String tradingName, String ownerName, String document, CreateMultipolygonDto coverageArea, CreatePdvGeolocationDto address) {
         this.tradingName = tradingName;
         this.ownerName = ownerName;
         this.document = document;
         this.coverageArea = coverageArea;
         this.address = address;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getTradingName() {
@@ -62,11 +52,12 @@ public class PdvDto {
         return document;
     }
 
-    public MultipolygonDto getCoverageArea() {
+    public CreateMultipolygonDto getCoverageArea() {
         return coverageArea;
     }
 
-    public PdvGeolocationDto getAddress() {
+    public CreatePdvGeolocationDto getAddress() {
         return address;
     }
+
 }

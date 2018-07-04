@@ -1,8 +1,12 @@
-package com.zxventures.challenge.controller.dto;
+package com.zxventures.challenge.dto;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
+import com.zxventures.challenge.dto.create.CreateMultipolygonDto;
+import com.zxventures.challenge.dto.create.CreatePdvDto;
+import com.zxventures.challenge.dto.create.CreatePdvGeolocationDto;
+import com.zxventures.challenge.dto.read.GetPdvDto;
 import com.zxventures.challenge.model.MultiPolygon;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
@@ -17,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.zxventures.challenge.controller.PdvAssertion.assertPdvsAreEquals;
+import static com.zxventures.challenge.resource.PdvAssertion.assertPdvsAreEquals;
 import static java.util.Arrays.asList;
 
 
@@ -46,12 +50,12 @@ public class PdvConverterTest {
         List<List<List<List<BigDecimal>>>> coordinates = new ArrayList<>();
         coordinates.add(asList(asList(point1, point2, point3, point4)));
 
-        MultipolygonDto multipolygonDto = new MultipolygonDto("MultiPolygon", coordinates);
+        CreateMultipolygonDto createMultipolygonDto = new CreateMultipolygonDto("MultiPolygon", coordinates);
 
-        PdvGeolocationDto pdvGeolocationDto = new PdvGeolocationDto("Point", asList(BigDecimal.ONE, BigDecimal.TEN));
+        CreatePdvGeolocationDto createPdvGeolocationDto = new CreatePdvGeolocationDto("Point", asList(BigDecimal.ONE, BigDecimal.TEN));
 
-        PdvDto dto = new PdvDto(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-                multipolygonDto, pdvGeolocationDto);
+        CreatePdvDto dto = new CreatePdvDto(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                createMultipolygonDto, createPdvGeolocationDto);
 
         Pdv pdv = pdvConverter.fromDtoToModel(dto);
 
@@ -71,7 +75,7 @@ public class PdvConverterTest {
             add("coverageArea", new MultiPolygon(asList(firstPdvPolygon)));
         }});
 
-        PdvDto pdvDto = pdvConverter.fromModelToDto(pdv);
-        assertPdvsAreEquals(pdv, pdvDto);
+        GetPdvDto getPdvDto = pdvConverter.fromModelToDto(pdv);
+        assertPdvsAreEquals(pdv, getPdvDto);
     }
 }

@@ -39,6 +39,9 @@ dependencies {
     //Database
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 
+    //GraphQl
+    compile 'com.graphql-java:graphql-spring-boot-starter:3.6.0'
+    compile 'com.graphql-java:graphql-java-tools:3.2.0'
 
     //Test
     testCompile 'junit:junit:4.12'

@@ -1,9 +1,9 @@
-package com.zxventures.challenge.controller.dto.templates;
+package com.zxventures.challenge.dto.templates;
 
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.TemplateLoader;
 import com.zxventures.challenge.CustomRule;
-import com.zxventures.challenge.controller.dto.MultipolygonDto;
+import com.zxventures.challenge.dto.create.CreateMultipolygonDto;
 
 public class MultipolygonDtoTemplateLoader implements TemplateLoader {
 
@@ -15,24 +15,24 @@ public class MultipolygonDtoTemplateLoader implements TemplateLoader {
 
     @Override
     public void load() {
-        Fixture.of(MultipolygonDto.class).addTemplate(VALID, new CustomRule() {{
+        Fixture.of(CreateMultipolygonDto.class).addTemplate(VALID, new CustomRule() {{
             add("type", "MultiPolygon");
             add("coordinates", randomDtoPolygonCoordinates());
         }});
 
-        Fixture.of(MultipolygonDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_NULL).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreateMultipolygonDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_NULL).inherits(VALID, new CustomRule() {{
             add("type", null);
         }});
 
-        Fixture.of(MultipolygonDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_BLANK).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreateMultipolygonDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_BLANK).inherits(VALID, new CustomRule() {{
             add("type", "    ");
         }});
 
-        Fixture.of(MultipolygonDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_EMPTY).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreateMultipolygonDto.class).addTemplate(INVALID_BECAUSE_TYPE_IS_EMPTY).inherits(VALID, new CustomRule() {{
             add("type", "");
         }});
 
-        Fixture.of(MultipolygonDto.class).addTemplate(INVALID_BECAUSE_HAS_A_INVALID_TYPE).inherits(VALID, new CustomRule() {{
+        Fixture.of(CreateMultipolygonDto.class).addTemplate(INVALID_BECAUSE_HAS_A_INVALID_TYPE).inherits(VALID, new CustomRule() {{
             add("type", "Point");
         }});
     }

@@ -18,7 +18,7 @@ public class Polygon {
 
     public Polygon(List<Point> vertices) {
         if(vertices.size() < 3){
-            throw new InvalidPolygonException();
+            throw new InvalidPolygonException("Polygon must have at least 3 vertices");
         }
         this.vertices = new ArrayList<>(vertices);
     }

@@ -1,5 +1,9 @@
-package com.zxventures.challenge.controller.dto;
+package com.zxventures.challenge.dto;
 
+import com.zxventures.challenge.dto.create.CreatePdvDto;
+import com.zxventures.challenge.dto.read.GetMultipolygonDto;
+import com.zxventures.challenge.dto.read.GetPdvDto;
+import com.zxventures.challenge.dto.read.GetPdvGeolocationDto;
 import com.zxventures.challenge.model.MultiPolygon;
 import com.zxventures.challenge.model.Pdv;
 import com.zxventures.challenge.model.Point;
@@ -15,7 +19,7 @@ import static java.util.Arrays.asList;
 @Component
 public class PdvConverter {
 
-    public Pdv fromDtoToModel(PdvDto dto){
+    public Pdv fromDtoToModel(CreatePdvDto dto){
 
         List<List<List<List<BigDecimal>>>> coverageAreaCoordinates = dto.getCoverageArea().getCoordinates();
 
@@ -31,19 +35,19 @@ public class PdvConverter {
         return new Pdv(geolocation, multiPolygon, dto.getTradingName(), dto.getOwnerName(), dto.getDocument());
     }
 
-    public PdvDto fromModelToDto(Pdv pdv) {
+    public GetPdvDto fromModelToDto(Pdv pdv) {
 
         List<List<List<List<BigDecimal>>>> coordinates = pdv.getCoverageArea().getPolygons().stream().map(Polygon::getVertices)
                 .map(vertices -> vertices.stream().map(vertex -> asList(vertex.getX(), vertex.getY())).collect(Collectors.toList()))
                 .map(list -> asList(list))
                 .collect(Collectors.toList());
 
-        MultipolygonDto coverageArea = new MultipolygonDto("MultiPolygon",coordinates);
+        GetMultipolygonDto coverageArea = new GetMultipolygonDto("MultiPolygon",coordinates);
 
         Point pdvGeolocation = pdv.getGeolocation();
-        PdvGeolocationDto address = new PdvGeolocationDto("Point", asList(pdvGeolocation.getX(), pdvGeolocation.getY()));
+        GetPdvGeolocationDto address = new GetPdvGeolocationDto("Point", asList(pdvGeolocation.getX(), pdvGeolocation.getY()));
 
-        PdvDto dto = new PdvDto(pdv.getId(), pdv.getTradingName(), pdv.getOwnerName(), pdv.getDocument(), coverageArea, address);
+        GetPdvDto dto = new GetPdvDto(pdv.getId(), pdv.getTradingName(), pdv.getOwnerName(), pdv.getDocument(), coverageArea, address);
 
         return dto;
     }

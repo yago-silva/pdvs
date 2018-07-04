@@ -1,4 +1,4 @@
-package com.zxventures.challenge.controller.dto;
+package com.zxventures.challenge.dto.create;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MultipolygonDto {
+public class CreateMultipolygonDto {
 
     @NotBlank
     @Pattern(regexp = "MultiPolygon")
@@ -20,9 +20,9 @@ public class MultipolygonDto {
      * Here just because of jackson
      * */
     @Deprecated
-    MultipolygonDto(){}
+    CreateMultipolygonDto(){}
 
-    public MultipolygonDto(String type, List<List<List<List<BigDecimal>>>> coordinates) {
+    public CreateMultipolygonDto(String type, List<List<List<List<BigDecimal>>>> coordinates) {
         this.type = type;
         this.coordinates = coordinates;
     }

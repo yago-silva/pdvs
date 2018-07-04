@@ -1,0 +1,45 @@
+type MultipolygonDto {
+    type: String!
+    coordinates: [[[[Float]]]]!
+}
+
+type PdvGeolocationDto {
+    type: String!
+    coordinates: [Float]!
+}
+
+type PdvDto {
+    id: ID!
+    tradingName: String!
+    ownerName: String!
+    document: String!
+    address: PdvGeolocationDto!
+    coverageArea: MultipolygonDto!
+}
+
+type Query {
+    getPdvById(id: ID!): PdvDto
+    getCloserFrom(lng: Float!, lat: Float!): PdvDto
+}
+
+input MultipolygonInputDto {
+    type: String
+    coordinates: [[[[Float]]]]
+}
+
+input PdvGeolocationInputDto {
+    type: String
+    coordinates: [Float]
+}
+
+input PdvInputDto {
+    tradingName: String
+    ownerName: String
+    document: String
+    address: PdvGeolocationInputDto
+    coverageArea: MultipolygonInputDto
+}
+
+type Mutation {
+    save(input: PdvInputDto): PdvDto
+}

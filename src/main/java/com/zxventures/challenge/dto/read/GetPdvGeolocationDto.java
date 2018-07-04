@@ -1,4 +1,4 @@
-package com.zxventures.challenge.controller.dto;
+package com.zxventures.challenge.dto.read;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PdvGeolocationDto {
+public class GetPdvGeolocationDto {
 
     @NotNull
     @Pattern(regexp = "Point")
@@ -20,9 +20,9 @@ public class PdvGeolocationDto {
      * Here just because of jackson
      * */
     @Deprecated
-    PdvGeolocationDto(){}
+    GetPdvGeolocationDto(){}
 
-    public PdvGeolocationDto(String type, List<BigDecimal> coordinates) {
+    public GetPdvGeolocationDto(String type, List<BigDecimal> coordinates) {
         this.type = type;
         this.coordinates = coordinates;
     }
